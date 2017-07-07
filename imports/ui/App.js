@@ -10,8 +10,8 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      recipeTitle: '',
-      recipeList:'',
+      recipeTitle:'Receita1',
+      recipeList:'Leite,Pao',
       recipes: JSON.parse(window.localStorage.getItem('recipes'))
     };
   }
