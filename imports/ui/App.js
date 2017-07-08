@@ -1,13 +1,16 @@
 import React from 'react';
+import Modal from 'react-modal';
 
 import AddRecipe from './AddRecipe.js';
 import List from './List.js';
+
 
 export default class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
+      isOpen: false,
       recipeTitle:'',
       recipeList:'',
       recipes: JSON.parse(window.localStorage.getItem('recipes'))
@@ -20,6 +23,7 @@ export default class App extends React.Component{
       storage.push([this.state.recipeTitle,this.state.recipeList]);
       window.localStorage.setItem('recipes',JSON.stringify(storage));
       this.setState({
+        isOpen: false,
         recipeTitle:'',
         recipeList:'',
         recipes: storage
@@ -41,6 +45,8 @@ export default class App extends React.Component{
   }
 
   editHandler(position){
+    this.setState({isOpen:true});
+    console.log(position);
     if (this.state.recipeList&&this.state.recipeTitle) {
       const storage = this.state.recipes;
       storage.splice(position,1,[this.state.recipeTitle,this.state.recipeList]);
@@ -64,18 +70,33 @@ export default class App extends React.Component{
     });
   }
 
+  onClickHandler(){
+    this.setState({
+      isOpen: true
+    });
+  }
+
   render(){
     return (
-      <div>
+      <div className='container'>
         <h1> Your Recipes Book </h1>
+        <button onClick={(e) => this.onClickHandler()}>Add Recipe</button>
 
-        <AddRecipe
-          addHandler={(e) => this.addHandler(e)}
-          valueTitle={this.state.recipeTitle}
-          valueList={this.state.recipeList}
-          editTitleHandler={(e) => this.editTitleHandler(e)}
-          editListHandler={(e) => this.editListHandler(e)}
-        />
+        <Modal
+          isOpen={this.state.isOpen}
+          contentLabel="Add Link"
+          onRequestClose={() => this.setState({isOpen:false})}>
+
+          <AddRecipe
+            addHandler={(e) => this.addHandler(e)}
+            valueTitle={this.state.recipeTitle}
+            valueList={this.state.recipeList}
+            editTitleHandler={(e) => this.editTitleHandler(e)}
+            editListHandler={(e) => this.editListHandler(e)}
+            editHandler={(position) => this.editHandler(position)}
+          />
+
+        </Modal>
 
         <List
           editHandler={(position) => this.editHandler(position)}

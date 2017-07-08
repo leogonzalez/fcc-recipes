@@ -4,7 +4,7 @@ import Item from './Item.js';
 export default function List(props) {
   return (
     <div>
-      <p>Here I generate a list of Items</p>
+      <p>List of Recipes</p>
       {props.recipeList.map((item,i) => {
         return (
 
