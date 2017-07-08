@@ -13,7 +13,7 @@ export default class App extends React.Component{
       isOpen: false,
       recipeTitle:'',
       recipeList:'',
-      recipes: JSON.parse(window.localStorage.getItem('recipes')),
+      recipes: JSON.parse(window.localStorage.getItem('recipes')) || [],
       pos: undefined
     };
   }
