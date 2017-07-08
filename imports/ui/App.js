@@ -17,18 +17,29 @@ export default class App extends React.Component{
     };
   }
 
-  addHandler(){
+  addHandler(position = null){
     if (this.state.recipeList&&this.state.recipeTitle) {
-      const storage = this.state.recipes;
-      storage.push([this.state.recipeTitle,this.state.recipeList]);
-      window.localStorage.setItem('recipes',JSON.stringify(storage));
-      this.setState({
-        isOpen: false,
-        recipeTitle:'',
-        recipeList:'',
-        recipes: storage
-      });
-      console.log(this.state);
+      if(!position) {
+        const storage = this.state.recipes;
+        storage.push([this.state.recipeTitle,this.state.recipeList]);
+        window.localStorage.setItem('recipes',JSON.stringify(storage));
+        this.setState({
+          isOpen: false,
+          recipeTitle:'',
+          recipeList:'',
+          recipes: storage
+        });
+      } else if (position) {
+        const storage = this.state.recipes;
+        storage.splice(position,1,[this.state.recipeTitle,this.state.recipeList]);
+        window.localStorage.setItem('recipes',JSON.stringify(storage));
+        this.setState({
+          isOpen: false,
+          recipeTitle:'',
+          recipeList:'',
+          recipes: storage
+        });
+      }
     }
   }
 
@@ -47,15 +58,9 @@ export default class App extends React.Component{
   editHandler(position){
     this.setState({isOpen:true});
     console.log(position);
+
     if (this.state.recipeList&&this.state.recipeTitle) {
-      const storage = this.state.recipes;
-      storage.splice(position,1,[this.state.recipeTitle,this.state.recipeList]);
-      window.localStorage.setItem('recipes',JSON.stringify(storage));
-      this.setState({
-        recipeTitle:'',
-        recipeList:'',
-        recipes: storage
-      });
+
     }
   }
 
