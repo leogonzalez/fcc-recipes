@@ -9,7 +9,7 @@ export default function Item(props) {
       <Ingredients
         ingredientsList={props.ingredientsList}
       />
-      <button onClick={props.deleteHandler}>Delete</button>
+      <button onClick={() => props.deleteHandler(props.position)}>Delete</button>
       <button onClick={props.editHandler}>Edit</button>
     </div>
   );

@@ -24,6 +24,7 @@ export default class App extends React.Component{
       this.setState({
         recipes: storage
       });
+      console.log(this.state);
     }
   }
 
@@ -43,8 +44,16 @@ export default class App extends React.Component{
     console.log(`Este foi um edit`)
   }
 
-  deleteHandler() {
-    console.log(`Este foi um delete`)
+  deleteHandler(position) {
+    console.log(`Este foi um delete de ${position}`);
+    const storage = this.state.recipes;
+    console.log(storage);
+    storage.splice(position,1);
+    console.log(storage);
+    window.localStorage.setItem('recipes',JSON.stringify(storage));
+    this.setState({
+      recipes: storage
+    });
   }
 
   render(){
@@ -60,7 +69,7 @@ export default class App extends React.Component{
 
         <List
           editHandler={this.editHandler}
-          deleteHandler={this.deleteHandler}
+          deleteHandler={(position) => this.deleteHandler(position)}
           recipeList={this.state.recipes}
         />
       </div>
