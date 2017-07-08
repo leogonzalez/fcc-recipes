@@ -2,16 +2,14 @@ import React from 'react';
 
 import AddRecipe from './AddRecipe.js';
 import List from './List.js';
-import localStorageKeys from '../api/localStorage.js';
-
 
 export default class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
-      recipeTitle:'Receita1',
-      recipeList:'Leite,Pao',
+      recipeTitle:'',
+      recipeList:'',
       recipes: JSON.parse(window.localStorage.getItem('recipes'))
     };
   }
@@ -22,6 +20,8 @@ export default class App extends React.Component{
       storage.push([this.state.recipeTitle,this.state.recipeList]);
       window.localStorage.setItem('recipes',JSON.stringify(storage));
       this.setState({
+        recipeTitle:'',
+        recipeList:'',
         recipes: storage
       });
       console.log(this.state);
@@ -40,18 +40,26 @@ export default class App extends React.Component{
     })
   }
 
-  editHandler(){
-    console.log(`Este foi um edit`)
+  editHandler(position){
+    if (this.state.recipeList&&this.state.recipeTitle) {
+      const storage = this.state.recipes;
+      storage.splice(position,1,[this.state.recipeTitle,this.state.recipeList]);
+      window.localStorage.setItem('recipes',JSON.stringify(storage));
+      this.setState({
+        recipeTitle:'',
+        recipeList:'',
+        recipes: storage
+      });
+    }
   }
 
   deleteHandler(position) {
-    console.log(`Este foi um delete de ${position}`);
     const storage = this.state.recipes;
-    console.log(storage);
     storage.splice(position,1);
-    console.log(storage);
     window.localStorage.setItem('recipes',JSON.stringify(storage));
     this.setState({
+      recipeTitle:'',
+      recipeList:'',
       recipes: storage
     });
   }
@@ -63,12 +71,14 @@ export default class App extends React.Component{
 
         <AddRecipe
           addHandler={(e) => this.addHandler(e)}
+          valueTitle={this.state.recipeTitle}
+          valueList={this.state.recipeList}
           editTitleHandler={(e) => this.editTitleHandler(e)}
           editListHandler={(e) => this.editListHandler(e)}
         />
 
         <List
-          editHandler={this.editHandler}
+          editHandler={(position) => this.editHandler(position)}
           deleteHandler={(position) => this.deleteHandler(position)}
           recipeList={this.state.recipes}
         />

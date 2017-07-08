@@ -8,10 +8,12 @@ export default function AddRecipe(props) {
         <h4>Add Your Recipe</h4>
         <input
           placeholder='Recipe Title'
+          value={props.valueTitle}
           onChange={props.editTitleHandler}
         />
 
         <textarea placeholder='Ingredients separated by comma'
+          value={props.valueList}
           onChange={props.editListHandler}
         />
       </form>
