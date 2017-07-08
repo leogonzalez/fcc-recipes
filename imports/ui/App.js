@@ -13,32 +13,37 @@ export default class App extends React.Component{
       isOpen: false,
       recipeTitle:'',
       recipeList:'',
-      recipes: JSON.parse(window.localStorage.getItem('recipes'))
+      recipes: JSON.parse(window.localStorage.getItem('recipes')),
+      pos: undefined
     };
   }
 
-  addHandler(position = null){
+  addHandler(){
     if (this.state.recipeList&&this.state.recipeTitle) {
-      if(!position) {
-        const storage = this.state.recipes;
+      const storage = this.state.recipes;
+      console.log(this.state.pos);
+      if(this.state.pos) {
+        storage.splice(this.state.pos,1,[this.state.recipeTitle,this.state.recipeList]);
+        window.localStorage.setItem('recipes',JSON.stringify(storage));
+        this.setState({
+          isOpen: false,
+          recipeTitle:'',
+          recipeList:'',
+          recipes: storage,
+          pos: undefined
+        });
+
+      } else {
         storage.push([this.state.recipeTitle,this.state.recipeList]);
         window.localStorage.setItem('recipes',JSON.stringify(storage));
         this.setState({
           isOpen: false,
           recipeTitle:'',
           recipeList:'',
-          recipes: storage
+          recipes: storage,
+          pos: undefined
         });
-      } else if (position) {
-        const storage = this.state.recipes;
-        storage.splice(position,1,[this.state.recipeTitle,this.state.recipeList]);
-        window.localStorage.setItem('recipes',JSON.stringify(storage));
-        this.setState({
-          isOpen: false,
-          recipeTitle:'',
-          recipeList:'',
-          recipes: storage
-        });
+
       }
     }
   }
@@ -54,15 +59,11 @@ export default class App extends React.Component{
       recipeList: e.target.value
     })
   }
-
-  editHandler(position){
-    this.setState({isOpen:true});
-    console.log(position);
-
-    if (this.state.recipeList&&this.state.recipeTitle) {
-
-    }
-  }
+  //
+  // editHandler(position){
+  //   this.setState({isOpen:true});
+  //   console.log(position);
+  // }
 
   deleteHandler(position) {
     const storage = this.state.recipes;
@@ -71,13 +72,15 @@ export default class App extends React.Component{
     this.setState({
       recipeTitle:'',
       recipeList:'',
-      recipes: storage
+      recipes: storage,
+      pos: undefined
     });
   }
 
-  onClickHandler(){
+  onClickHandler(pos){
     this.setState({
-      isOpen: true
+      isOpen: true,
+      pos: pos
     });
   }
 
@@ -85,29 +88,33 @@ export default class App extends React.Component{
     return (
       <div className='container'>
         <h1> Your Recipes Book </h1>
-        <button onClick={(e) => this.onClickHandler()}>Add Recipe</button>
+        <button
+        className="btn btn-default"
+        onClick={() => this.onClickHandler()}>Add Recipe</button>
 
         <Modal
           isOpen={this.state.isOpen}
           contentLabel="Add Link"
-          onRequestClose={() => this.setState({isOpen:false})}>
+          onRequestClose={() => this.setState({isOpen:false})}
+          >
 
           <AddRecipe
-            addHandler={(e) => this.addHandler(e)}
+            addHandler={() => this.addHandler(this.state.pos)}
             valueTitle={this.state.recipeTitle}
             valueList={this.state.recipeList}
             editTitleHandler={(e) => this.editTitleHandler(e)}
             editListHandler={(e) => this.editListHandler(e)}
-            editHandler={(position) => this.editHandler(position)}
           />
 
         </Modal>
 
-        <List
-          editHandler={(position) => this.editHandler(position)}
-          deleteHandler={(position) => this.deleteHandler(position)}
-          recipeList={this.state.recipes}
-        />
+        <div className='list'>
+          <List
+            editHandler={(position) => this.onClickHandler(position)}
+            deleteHandler={(position) => this.deleteHandler(position)}
+            recipeList={this.state.recipes}
+          />
+        </div>
       </div>
     )
   }

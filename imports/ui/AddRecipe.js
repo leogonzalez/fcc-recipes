@@ -3,7 +3,6 @@ import React from 'react';
 export default function AddRecipe(props) {
   return (
     <div>
-      Modal goes here
       <form onSubmit={props.addHandler}>
         <h4>Add Your Recipe</h4>
         <input
@@ -17,7 +16,9 @@ export default function AddRecipe(props) {
           onChange={props.editListHandler}
         />
       </form>
-      <button onClick={props.addHandler}>Add Recipe</button>
+      <button
+      className="btn btn-default"
+      onClick={props.addHandler}>Add Recipe</button>
     </div>
   );
 }

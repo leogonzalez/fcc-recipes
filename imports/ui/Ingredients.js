@@ -3,14 +3,13 @@ import React from 'react';
 export default function Ingredients(props) {
   return (
     <div>
-      Ingredients List
-      {
-        props.ingredientsList.split(',').map((item) => {
+    <ul className='list-group'>
+      {props.ingredientsList.split(',').map((item) => {
           return (
-            <p key={item}>{item}</p>
+            <li className='list-group-item' key={item}>{item}</li>
           )
-        })
-      }
+        })}
+    </ul>
     </div>
   );
 }

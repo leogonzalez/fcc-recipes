@@ -3,3 +3,7 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+.list {
+  margin-top:20px;
+}
